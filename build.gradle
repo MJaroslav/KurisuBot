@@ -1,0 +1,44 @@
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+    maven {
+    	url  "https://jitpack.io"
+    }
+}
+
+apply plugin: "application"
+mainClassName = "mjaroslav.bots.kurisu.KurisuBot"
+archivesBaseName = "KurisuBot"
+version = "1.0.0"
+
+compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+task fatJar(type: Jar) {
+	manifest {
+    	attributes "Main-Class": mainClassName
+  	}	
+    baseName = project.name + "-all"
+    from {
+    	configurations.compile.collect {
+    		it.isDirectory() ? it : zipTree(it)
+    	}
+    }
+    with jar
+}
+
+jar {
+	manifest {
+    	attributes "Main-Class": mainClassName
+  	}	
+}
+
+dependencies {
+	compile "com.github.austinv11:Discord4j:2.9.3"
+	compile "com.vk.api:sdk:0.5.11"
+	compile "com.google.code.gson:gson:2.8.2"
+}
